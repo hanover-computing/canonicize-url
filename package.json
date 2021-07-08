@@ -1,0 +1,41 @@
+{
+  "name": "normalize-url-plus",
+  "version": "0.0.0",
+  "description": "normalize-url plus additional features to supercharge link normalization!",
+  "main": "index.js",
+  "repository": "JaneJeon/normalize-url-plus",
+  "author": "Jane Jeon <me@janejeon.dev>",
+  "license": "LGPL-3.0",
+  "scripts": {},
+  "devDependencies": {
+    "@janejeon/eslint-config": "^2.0.2",
+    "@janejeon/prettier-config": "^1.0.4",
+    "eslint": "^7.30.0",
+    "husky": "^4.3.8",
+    "jest": "^27.0.6",
+    "jest-junit": "^12.2.0",
+    "lint-staged": "^11.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.2",
+    "skip-ci": "^1.0.4"
+  },
+  "keywords": [
+    "normalize",
+    "url",
+    "uri",
+    "address",
+    "string",
+    "normalization",
+    "normalisation",
+    "query",
+    "querystring",
+    "simplify",
+    "strip",
+    "trim",
+    "canonical"
+  ],
+  "prettier": "@janejeon/prettier-config",
+  "eslintConfig": {
+    "extends": "@janejeon"
+  }
+}
