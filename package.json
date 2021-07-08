@@ -6,7 +6,9 @@
   "repository": "JaneJeon/normalize-url-plus",
   "author": "Jane Jeon <me@janejeon.dev>",
   "license": "LGPL-3.0",
-  "scripts": {},
+  "scripts": {
+    "test": "echo 'pass'"
+  },
   "devDependencies": {
     "@janejeon/eslint-config": "^2.0.2",
     "@janejeon/prettier-config": "^1.0.4",
