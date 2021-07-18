@@ -39,5 +39,10 @@
   "prettier": "@janejeon/prettier-config",
   "eslintConfig": {
     "extends": "@janejeon"
+  },
+  "dependencies": {
+    "got": "^11.8.2",
+    "ipaddr.js": "^2.0.1",
+    "normalize-url": "^6.1.0"
   }
 }
