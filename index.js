@@ -1,9 +1,9 @@
+import { URL } from 'url'
 import { parse } from 'ipaddr.js'
 import QuickLRU from 'quick-lru'
 import normalizeUrl from './utils/normalize-url'
 import httpClientGen from './utils/http-client'
 import dnsCacheGen from './utils/dns-lookup'
-import getDomain from './utils/get-domain'
 import canonicize from './utils/canonicize'
 
 export default ({
@@ -46,8 +46,8 @@ export default ({
       throw new Error('Invalid protocol!')
 
     // 3. Another layer of protection against SSRF - ensure we're not hitting internal services
-    const domain = getDomain(link)
-    const { address } = await dnsCache.lookupAsync(domain)
+    const { hostname } = new URL(link)
+    const { address } = await dnsCache.lookupAsync(hostname)
     // Try to match "reserved" IP ranges: https://en.wikipedia.org/wiki/Reserved_IP_addresses
     // https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#case-2-application-can-send-requests-to-any-external-ip-address-or-domain-name
     // The function returns 'unicast' or the name of the reserved IP range, should it match any.
@@ -66,6 +66,7 @@ export default ({
     link = canonicize(res.body, res.headers, link, normalize)
 
     // 6. Clear out trackers (utm is taken care of in `normalize-url`, but also there may be other trackers)
+    // TODO:
     return link
   }
 }
