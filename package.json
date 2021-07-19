@@ -41,8 +41,10 @@
     "extends": "@janejeon"
   },
   "dependencies": {
+    "cacheable-lookup": "^5.0.4",
     "got": "^11.8.2",
     "ipaddr.js": "^2.0.1",
-    "normalize-url": "^6.1.0"
+    "normalize-url": "^6.1.0",
+    "quick-lru": "^5.1.1"
   }
 }

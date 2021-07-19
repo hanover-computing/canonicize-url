@@ -1,7 +1,9 @@
+import { URL } from 'url'
 import normalizeUrl from 'normalize-url'
-import { lookup } from 'dns/promises'
 import { parse } from 'ipaddr.js'
-// import got from 'got'
+import got from 'got'
+import CacheableLookup from 'cacheable-lookup'
+import QuickLRU from 'quick-lru'
 
 export default ({
   normalizeUrlOptions = {
@@ -9,9 +11,24 @@ export default ({
     stripHash: true,
     removeQueryParameters: [/^utm_\w+/i]
   },
-  allowedProtocols = ['https://']
-  // cache = new Map()
+  allowedProtocols = ['https://'],
+  gotOptions = {
+    cache: new QuickLRU({ maxSize: 100 }),
+    followRedirect: true,
+    maxRedirects: 10,
+    httpsOptions: {
+      rejectUnauthorized: true
+    },
+    hooks: [],
+    timeout: {
+      request: 10000 // global timeout
+    }
+  },
+  dnsCache = new QuickLRU({ maxSize: 100000 }) // this is out of the "got" configuration since it's used for manual DNS lookups as well
 }) => {
+  const cachedLookup = new CacheableLookup({ cache: dnsCache })
+  const httpClient = got.extend({ ...gotOptions, dnsCache: cachedLookup })
+
   // Normalize URL so that we can search by URL.
   return async function normalizePlus(url = '') {
     // 1. "Base" normalization using normalize-url
@@ -25,11 +42,8 @@ export default ({
       throw new Error('Invalid protocol!')
 
     // 3. Another layer of protection against SSRF - ensure we're not hitting internal services
-    const noProtocol = normalizeUrl(pass1, {
-      ...normalizeUrlOptions,
-      stripProtocol: true
-    })
-    const { address } = await lookup(noProtocol)
+    const { hostname } = new URL(pass1)
+    const { address } = await cachedLookup.lookupAsync(hostname)
     // Try to match "reserved" IP ranges: https://en.wikipedia.org/wiki/Reserved_IP_addresses
     // https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html#case-2-application-can-send-requests-to-any-external-ip-address-or-domain-name
     // The function returns 'unicast' or the name of the reserved IP range, should it match any.
@@ -37,10 +51,14 @@ export default ({
     if (parse(address).range() !== 'unicast')
       throw new Error('The IP of the domain is reserved!')
 
-    // 4.
-    // - canonical tag (need to actually visit the website for this - use fetch/axios/got/etc)
-    // - clear out trackers (utm is taken care of in `normalize-url`, but also there may be other trackers)
-    // - un-AMP-ify links
-    // - "Follow" links to deal with "intermediate" links (e.g. links on Google search engine) - this would also require us to actually visit the website for this
+    // 4. "Follow" links to deal with "intermediate" links (such as the links on google search results)
+    // eslint-disable-next-line no-unused-vars
+    const { url: pass2, body } = await httpClient.get(pass1)
+
+    // 5. Look for the canonical link (and if present, exit early)
+
+    // 6. Clear out trackers (utm is taken care of in `normalize-url`, but also there may be other trackers)
+
+    // 7. un-AMP-ify links
   }
 }
