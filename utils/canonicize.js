@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import trim from 'lodash/trim'
 import leven from 'leven'
-import getDomain from './get-domain'
+import parseTld from 'tld-extract'
 import urlIsAmp from './url-is-amp'
 
 export default function canonicize(body, headers, normalizedUrl, normalize) {
@@ -49,7 +49,7 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
   // The only reason we want canonical is to make our job with normalization easier;
   // So we need to make sure the canonical link IS for the url we're trying to normalize!
 
-  const baseDomain = getDomain(normalizedUrl)
+  const { domain: baseDomain } = parseTld(normalizedUrl)
   let result = normalizedUrl
   let minDist = Number.POSITIVE_INFINITY
 
@@ -67,7 +67,7 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
     .filter(link => {
       // First, ensure that every match is a valid URL w/ a matching domain
       try {
-        return getDomain(link) === baseDomain
+        return parseTld(link).domain === baseDomain
       } catch (err) {
         return false
       }
@@ -80,6 +80,7 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
       // Then, normalize
       return normalize(link)
     })
+
     .forEach(normalizedLink => {
       const dist = leven(normalizedUrl, normalizedLink)
       if (dist < minDist) {
