@@ -80,7 +80,7 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
       // Then, normalize
       return normalize(link)
     })
-
+    // Then, sort by similarity to the normalized URL of the page we ended up in
     .forEach(normalizedLink => {
       const dist = leven(normalizedUrl, normalizedLink)
       if (dist < minDist) {

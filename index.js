@@ -37,7 +37,7 @@ export default ({
 
     // 1. "Base" normalization using normalize-url
     // When an invalid link is passed, it will throw.
-    link = normalize(url)
+    link = normalize(url, false) // simple normalization to start off with
 
     // 2. To prevent Server Side Request Forgery, we need to check the protocol.
     // Otherwise, you could end up making requests to internal services (e.g. the database)
@@ -56,8 +56,8 @@ export default ({
       throw new Error('The IP of the domain is reserved!')
 
     // 4. Follow redirects to deal with "intermediate" links (such as the links on google search results)
-    const res = await httpClient.get(link)
-    link = normalize(res.url)
+    const res = await httpClient(link)
+    link = normalize(res.url, true) // strip off trackers to serve as "base"
 
     // 5. Look for the canonical link (also un-AMP-ifies the canonical link)
     // Not writing a separate metascraper-canonical library for this, as the "standard" way of determining
@@ -65,8 +65,8 @@ export default ({
     // // TODO: cache this shit
     link = canonicize(res.body, res.headers, link, normalize)
 
-    // 6. Clear out trackers (utm is taken care of in `normalize-url`, but also there may be other trackers)
-    // TODO:
     return link
+
+    // TODO: literally just embed the list of tracked URLs in the database right within the library layer so that we can run a similarity search?
   }
 }
