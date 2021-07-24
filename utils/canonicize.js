@@ -66,6 +66,9 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
     })
     .filter(link => {
       // First, ensure that every match is a valid URL w/ a matching domain
+      // In this case, we're only matching the "top-level" domain -
+      // e.g. subdomain.(domain.com) - as a lot of sites host their shit on amp.(site.com)
+      // so we want to include references to www.site.com (actually *prefer* those)
       try {
         return parseTld(link).domain === baseDomain
       } catch (err) {
@@ -78,7 +81,7 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
     })
     .map(link => {
       // Then, normalize
-      return normalize(link)
+      return normalize(link, true)
     })
     // Then, sort by similarity to the normalized URL of the page we ended up in
     .forEach(normalizedLink => {
