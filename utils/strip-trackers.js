@@ -27,7 +27,6 @@ export default function cleanUrl(url) {
   // TODO: benchmark regex search
   // TODO: cache new RegExp() calls...?
   // For now, this is a version written w/o any performance shit in mind
-  url = url.toLowerCase()
 
   providers.forEach(provider => {
     // Check provider urlPattern against provided URI
