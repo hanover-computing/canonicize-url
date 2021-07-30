@@ -22,7 +22,7 @@ export default ({
     },
     hooks: [],
     timeout: {
-      request: 10000 // global timeout
+      request: 3000 // global timeout
     }
   },
   dnsCacheStore = new QuickLRU({ maxSize: 100000 }) // this is out of the "got" configuration since it's used for manual DNS lookups as well
