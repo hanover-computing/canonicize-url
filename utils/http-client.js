@@ -1,5 +1,5 @@
-import got from 'got'
+import got from 'got-scraping'
 
 export default function httpClient(gotOptions) {
-  return got.extend(gotOptions)
+  return got.gotScraping.extend(gotOptions)
 }

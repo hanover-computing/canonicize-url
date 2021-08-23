@@ -14,16 +14,16 @@ export default ({
   },
   allowedProtocols = ['https://'],
   gotOptions = {
-    cache: new QuickLRU({ maxSize: 100 }),
     followRedirect: true,
     maxRedirects: 10,
     httpsOptions: {
       rejectUnauthorized: true
     },
-    hooks: [],
+    throwHttpErrors: true,
     timeout: {
       request: 3000 // global timeout
     }
+    // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
   },
   dnsCacheStore = new QuickLRU({ maxSize: 100000 }) // this is out of the "got" configuration since it's used for manual DNS lookups as well
 }) => {
