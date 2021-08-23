@@ -20,7 +20,8 @@ export default ({
     timeout: {
       request: 14000 // global timeout
     },
-    dnsCache: dnsCacheGen(new QuickLRU({ maxSize: 10000 }))
+    dnsCache: dnsCacheGen(new QuickLRU({ maxSize: 10000 })),
+    cache: new QuickLRU({ maxSize: 1000 })
     // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
   }
 }) => {
