@@ -28,7 +28,7 @@ export default ({
   const normalize = normalizeUrl(normalizeUrlOptions)
 
   // Normalize URL so that we can search by URL.
-  return async function normalizePlus(url = '') {
+  async function normalizePlus(url = '') {
     let link
 
     // 1. "Base" normalization using normalize-url
@@ -49,4 +49,6 @@ export default ({
 
     // TODO: literally just embed the list of tracked URLs in the database right within the library layer so that we can run a similarity search?
   }
+
+  return { normalizePlus, httpClient }
 }
