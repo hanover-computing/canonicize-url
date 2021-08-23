@@ -1,5 +1,15 @@
-import CacheableLookup from 'cacheable-lookup'
+import { URL } from 'url'
 
-export default function dnsCache(cache) {
-  return new CacheableLookup({ cache })
+export default dnsCache => {
+  return async url => {
+    if (!dnsCache) return true
+
+    try {
+      const { hostname } = new URL(url)
+      await dnsCache.lookupAsync(hostname)
+      return true
+    } catch (err) {
+      return false
+    }
+  }
 }

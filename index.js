@@ -1,7 +1,7 @@
 import QuickLRU from 'quick-lru'
+import CacheableLookup from 'cacheable-lookup'
 import normalizeUrl from './utils/normalize-url'
 import httpClientGen from './utils/http-client'
-import dnsCacheGen from './utils/dns-lookup'
 import canonicize from './utils/canonicize'
 
 export default ({
@@ -20,7 +20,7 @@ export default ({
     timeout: {
       request: 14000 // global timeout
     },
-    dnsCache: dnsCacheGen(new QuickLRU({ maxSize: 10000 })),
+    dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 10000 }) }),
     cache: new QuickLRU({ maxSize: 1000 })
     // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
   }
@@ -37,7 +37,7 @@ export default ({
     link = normalize(url, false) // simple normalization to start off with
 
     // 4. Follow redirects to deal with "intermediate" links (such as the links on google search results)
-    const res = await httpClient(link)
+    const res = await httpClient.get(link)
     link = normalize(res.url, true) // strip off trackers to serve as "base"
 
     // 5. Look for the canonical link (also un-AMP-ifies the canonical link)
