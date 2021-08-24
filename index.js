@@ -4,29 +4,34 @@ import normalizeUrl from './utils/normalize-url'
 import httpClientGen from './utils/http-client'
 import canonicize from './utils/canonicize'
 
-export default ({
-  normalizeUrlOptions = {
-    forceHttps: true,
-    stripHash: true,
-    removeQueryParameters: []
-  },
-  gotOptions = {
-    followRedirect: true,
-    maxRedirects: 10,
-    httpsOptions: {
-      rejectUnauthorized: true
+export default (
+  globalOpts = {
+    normalizeUrlOptions: {
+      forceHttps: true,
+      stripHash: true,
+      removeQueryParameters: []
     },
-    throwHttpErrors: true,
-    timeout: {
-      request: 14000 // global timeout
+    gotOptions: {
+      followRedirect: true,
+      maxRedirects: 10,
+      httpsOptions: {
+        rejectUnauthorized: true
+      },
+      throwHttpErrors: true,
+      timeout: {
+        request: 14000 // global timeout
+      },
+      dnsCache: new CacheableLookup({
+        cache: new QuickLRU({ maxSize: 10000 })
+      }),
+      cache: new QuickLRU({ maxSize: 1000 })
+      // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
     },
-    dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 10000 }) }),
-    cache: new QuickLRU({ maxSize: 1000 })
-    // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
+    allowedProtocols: ['http://', 'https://']
   }
-}) => {
-  const httpClient = httpClientGen(gotOptions)
-  const normalize = normalizeUrl(normalizeUrlOptions)
+) => {
+  const httpClient = httpClientGen(globalOpts)
+  const normalize = normalizeUrl(globalOpts.normalizeUrlOptions)
 
   // Normalize URL so that we can search by URL.
   async function normalizePlus(url = '') {
@@ -51,5 +56,6 @@ export default ({
     // TODO: literally just embed the list of tracked URLs in the database right within the library layer so that we can run a similarity search?
   }
 
+  // this HTTP Client contains URL normalization, SSRF protection, etc
   return { normalizePlus, httpClient }
 }
