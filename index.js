@@ -24,7 +24,8 @@ export default (
       dnsCache: new CacheableLookup({
         cache: new QuickLRU({ maxSize: 10000 })
       }),
-      cache: new QuickLRU({ maxSize: 1000 })
+      cache: new QuickLRU({ maxSize: 1000 }),
+      ssrfProtection: true
       // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
     },
     allowedProtocols: ['http://', 'https://']

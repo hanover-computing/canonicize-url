@@ -4,6 +4,8 @@ import { parse } from 'ipaddr.js'
 // Assume all URLs are properly formed at this point
 export default function ssrfHookGen(globalOpts) {
   return async function (options) {
+    if (!options.ssrfProtection) return
+
     const url = options.url
 
     // To prevent Server Side Request Forgery, we need to check the protocol.
