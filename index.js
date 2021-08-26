@@ -1,41 +1,33 @@
 import QuickLRU from 'quick-lru'
-import CacheableLookup from 'cacheable-lookup'
 import normalizeUrl from './utils/normalize-url'
 import httpClientGen from './utils/http-client'
 import canonicize from './utils/canonicize'
+import dnsLookupGen from './utils/dns-lookup'
 
-export default (
-  globalOpts = {
-    normalizeUrlOptions: {
-      forceHttps: true,
-      stripHash: true,
-      removeQueryParameters: []
+export default ({
+  normalizeUrlOptions = {
+    stripHash: true,
+    removeQueryParameters: []
+  },
+  gotOptions = {
+    followRedirect: true,
+    maxRedirects: 10,
+    httpsOptions: {
+      rejectUnauthorized: true
     },
-    gotOptions: {
-      followRedirect: true,
-      maxRedirects: 10,
-      httpsOptions: {
-        rejectUnauthorized: true
-      },
-      throwHttpErrors: true,
-      timeout: {
-        request: 14000 // global timeout
-      },
-      dnsCache: new CacheableLookup({
-        cache: new QuickLRU({ maxSize: 10000 })
-      }),
-      cache: new QuickLRU({ maxSize: 1000 }),
-      ssrfProtection: true
-      // for production, set proxyUrl to avoid SSRF: https://github.com/apify/got-scraping#got-scraping-extra-options
+    throwHttpErrors: true,
+    timeout: {
+      request: 14000 // global timeout
     },
-    allowedProtocols: ['http://', 'https://']
+    cache: new QuickLRU({ maxSize: 1000 })
   }
-) => {
-  const httpClient = httpClientGen(globalOpts)
-  const normalize = normalizeUrl(globalOpts.normalizeUrlOptions)
+}) => {
+  const httpClient = httpClientGen(gotOptions)
+  const dnsLookup = dnsLookupGen(gotOptions.dnsCache)
+  const normalize = normalizeUrl(normalizeUrlOptions, dnsLookup, httpClient)
 
   // Normalize URL so that we can search by URL.
-  async function normalizePlus(url = '') {
+  return async function normalizePlus(url = '') {
     let link
 
     // 1. "Base" normalization using normalize-url
@@ -56,7 +48,4 @@ export default (
 
     // TODO: literally just embed the list of tracked URLs in the database right within the library layer so that we can run a similarity search?
   }
-
-  // this HTTP Client contains URL normalization, SSRF protection, etc
-  return { normalizePlus, httpClient }
 }
