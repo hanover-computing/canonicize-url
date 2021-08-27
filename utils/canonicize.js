@@ -4,9 +4,18 @@ import leven from 'leven'
 import parseTld from 'tld-extract'
 import urlIsAmp from './url-is-amp'
 
-export default function canonicize(body, headers, normalizedUrl, normalize) {
+// Look for the canonical link (also un-AMP-ifies the canonical link)
+// Not writing a separate metascraper-canonical library for this, as the "standard" way of determining
+// canonical link includes looking at the HTTP header: https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls
+export async function canonicizeHook(res) {
+  if (!res.request.options.context.normalize) return
+  const { normalize } = res.request.options.context
+
+  // Normalize the "final" URL up front
+  const normalizedUrl = await normalize(res.url)
+
   // Ripped from https://github.com/KilledMufasa/AmputatorBot/blob/master/helpers/canonical_methods.py
-  const $ = cheerio.load(body)
+  const $ = cheerio.load(res.body)
   const matches = []
 
   // 5.1: rel=canonical <link> tag
@@ -15,10 +24,10 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
   })
 
   // 5.2: rel=canonical HTTP header
-  if ('link' in headers) {
+  if ('link' in res.headers) {
     // We're looking for something like:
     // Link: <https://example.com>; rel="canonical", ...
-    headers.link.split(',').forEach(linkHeader => {
+    res.headers.link.split(',').forEach(linkHeader => {
       const parts = linkHeader.split(';')
       if (parts.length !== 2) return
 
@@ -50,10 +59,8 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
   // So we need to make sure the canonical link IS for the url we're trying to normalize!
 
   const { domain: baseDomain } = parseTld(normalizedUrl)
-  let result = normalizedUrl
-  let minDist = Number.POSITIVE_INFINITY
 
-  matches
+  const candidates = matches
     .map(link => {
       // Before processing, we need to make sure all the URLs are in absolute form
       if (link.startsWith('//')) {
@@ -79,18 +86,22 @@ export default function canonicize(body, headers, normalizedUrl, normalize) {
       // Then, ensure that links aren't AMP'd
       return !urlIsAmp(link)
     })
-    .map(link => {
-      // Then, normalize
-      return normalize(link, true)
-    })
-    // Then, sort by similarity to the normalized URL of the page we ended up in
-    .forEach(normalizedLink => {
-      const dist = leven(normalizedUrl, normalizedLink)
+
+  let result = normalizedUrl
+  let minDist = Number.POSITIVE_INFINITY
+
+  for (const candidate of candidates) {
+    try {
+      const normalizedCandidate = await normalize(candidate)
+
+      // Then, sort by similarity to the normalized URL of the page we ended up in
+      const dist = leven(normalizedUrl, normalizedCandidate)
       if (dist < minDist) {
         minDist = dist
-        result = normalizedLink
+        result = normalizedCandidate
       }
-    })
+    } catch (err) {} // pass, the link is invalid
+  }
 
   return result
 }
