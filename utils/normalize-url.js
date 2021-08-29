@@ -44,7 +44,6 @@ export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
     }
 
     // always strip trackers for consistency (even if it means worse performance)!
-    return process.env.SKIP_CLEARURLS ? url : stripTrackers(url)
-    // I'm doing this so I can easily remove clearURLs support in the future; I still want *some* way to strip trackers, but the future of clearURLs as of now is not clear.
+    return stripTrackers(url)
   }
 }

@@ -8,7 +8,9 @@ module.exports = function (request, options) {
   // This is an EXTREMELY hacky workaround for jest not being able to load manual mocks for ES Modules.
   // Man, fuck this shit.
   if (request.includes('data/loader'))
-    request = request.replace('data/loader', 'data/__mocks__/loader.js')
+    request = request.replace('data/loader', 'data/__mocks__/loader')
+  if (request.includes('strip-trackers'))
+    request = request.replace('__mocks__/strip-trackers')
 
   // list global module that must be resolved by defaultResolver here
   if (
