@@ -7,7 +7,7 @@ import urlIsAmp from './url-is-amp'
 // Look for the canonical link (also un-AMP-ifies the canonical link)
 // Not writing a separate metascraper-canonical library for this, as the "standard" way of determining
 // canonical link includes looking at the HTTP header: https://developers.google.com/search/docs/advanced/crawling/consolidate-duplicate-urls
-export async function canonicizeHook(res) {
+export default async function canonicizeHook(res) {
   if (!res.request.options.context.normalize) return
   const { normalize } = res.request.options.context
 
