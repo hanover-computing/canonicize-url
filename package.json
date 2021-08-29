@@ -1,13 +1,18 @@
 {
   "name": "normalize-url-plus",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "normalize-url plus additional features to supercharge link normalization!",
-  "main": "index.js",
+  "exports": "./index.js",
+  "type": "module",
   "repository": "JaneJeon/normalize-url-plus",
   "author": "Jane Jeon <me@janejeon.dev>",
   "license": "LGPL-3.0",
   "scripts": {
-    "test": "echo 'pass'"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "update-data": "curl https://rules2.clearurls.xyz/data.minify.json > data/data.minify.json",
+    "lint": "run-s lint:*",
+    "lint:prettier": "prettier --check .",
+    "lint:eslint": "eslint ."
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
