@@ -1,3 +1,4 @@
+import { expect, describe, it } from '@jest/globals'
 import clearUrl from './strip-trackers'
 
 describe('stripping trackers', () => {

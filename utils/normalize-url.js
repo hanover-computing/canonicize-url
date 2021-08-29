@@ -3,7 +3,7 @@ import stripTrackers from './strip-trackers'
 import { URL } from 'url'
 
 export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
-  return async function normalize(url) {
+  return async function normalize(originalUrl) {
     // We default to non-www, https links
     const preferredOptions = {
       stripWWW: true,
@@ -11,20 +11,20 @@ export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
     }
 
     // Pass 1: try to force as much normalization as possible, knowing that this may break some links
-    url = normalizeUrl(url, {
+    let url = normalizeUrl(originalUrl, {
       ...normalizeUrlOptions,
       ...preferredOptions
     })
 
     // Check 1: if the www-stripped domain exists...
-    if (url.includes('www')) {
+    if (originalUrl.includes('www')) {
       const { hostname } = new URL(url)
       try {
         await dnsLookup(hostname)
       } catch (err) {
         // Pass 2: we can't resolve the www-stripped host at the DNS level, so we enable it
         preferredOptions.stripWWW = false
-        url = normalizeUrl(url, {
+        url = normalizeUrl(originalUrl, {
           ...normalizeUrlOptions,
           ...preferredOptions
         })
@@ -37,13 +37,14 @@ export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
     } catch (err) {
       // Pass 3: we can't reach the URL via HTTP HEAD request, so try downgrading to http
       preferredOptions.forceHttps = false
-      url = normalizeUrl(url, {
+      url = normalizeUrl(originalUrl, {
         ...normalizeUrlOptions,
         ...preferredOptions
       })
     }
 
     // always strip trackers for consistency (even if it means worse performance)!
-    return stripTrackers(url)
+    return process.env.SKIP_CLEARURLS ? url : stripTrackers(url)
+    // I'm doing this so I can easily remove clearURLs support in the future; I still want *some* way to strip trackers, but the future of clearURLs as of now is not clear.
   }
 }
