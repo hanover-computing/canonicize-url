@@ -15,7 +15,7 @@ export default function loadRuleset() {
       referralMarketing: ['rawRule']
     },
     {
-      urlPattern: '^https://rawtest.com',
+      urlPattern: '^https://www.amazon.com',
       rawRules: ['\\/ref=[^/?]*']
     }
   ]

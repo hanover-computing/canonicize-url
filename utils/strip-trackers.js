@@ -1,23 +1,9 @@
 import { URL } from 'url'
-import ref from '../data/data.minify.json'
-import httpClient from './http-client'
+import load from '../data/loader'
 
-const CLEARURLS_RULESET = 'https://rules2.clearurls.xyz/data.minify.json'
-let providers = Object.values(ref.providers)
+const providers = load()
 
-httpClient(CLEARURLS_RULESET)
-  .json()
-  .then(res => {
-    // eslint-disable-next-line no-console
-    console.log('Updated clearURLs ruleset with the latest file')
-    providers = Object.values(res.providers)
-  })
-  .catch(err => {
-    // eslint-disable-next-line no-console
-    console.error('Failed to fetch clearURLs ruleset: ', err)
-  })
-
-export default function cleanUrl(url) {
+export default function clearUrl(url) {
   // Clean the given URL with the provided rules data.
   // URLs matching a provider's `urlPattern` and one or more of that
   // provider's redirection patterns will cause the URL to be replaced
@@ -68,8 +54,16 @@ export default function cleanUrl(url) {
       }
     }
 
+    // At this point, all of the querystrings *should* be sorted by normalize-url (the vanilla one)
+
     // Rebuild valid URI string with remaining query parameters
     url = parsedUrl.toString()
+
+    // Strip raw fragments with rawRules
+    for (const rule of provider.rawRules || []) {
+      const regex = new RegExp(rule)
+      url = url.replace(regex, '')
+    }
   })
 
   return url
