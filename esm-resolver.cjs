@@ -5,7 +5,8 @@ const resolver = require('enhanced-resolve').create.sync({
 })
 
 module.exports = function (request, options) {
-  // Jest can't fucking pick up fucking ESM module mocks fucking fuck why the fuck won't it work with custom modules and not built-ins
+  // This is an EXTREMELY hacky workaround for jest not being able to load manual mocks for ES Modules.
+  // Man, fuck this shit.
   if (request.includes('data/loader'))
     request = request.replace('data/loader', 'data/__mocks__/loader.js')
 
