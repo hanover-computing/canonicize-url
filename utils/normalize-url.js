@@ -9,9 +9,11 @@ export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
       stripWWW: true,
       forceHttps: true
     }
+    // always strip trackers for consistency (even if it means worse performance)!
+    const cleanUrl = stripTrackers(originalUrl)
 
     // Pass 1: try to force as much normalization as possible, knowing that this may break some links
-    let url = normalizeUrl(originalUrl, {
+    let url = normalizeUrl(cleanUrl, {
       ...normalizeUrlOptions,
       ...preferredOptions
     })
@@ -37,13 +39,12 @@ export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
     } catch (err) {
       // Pass 3: we can't reach the URL via HTTP HEAD request, so try downgrading to http
       preferredOptions.forceHttps = false
-      url = normalizeUrl(originalUrl, {
+      url = normalizeUrl(cleanUrl, {
         ...normalizeUrlOptions,
         ...preferredOptions
       })
     }
 
-    // always strip trackers for consistency (even if it means worse performance)!
-    return stripTrackers(url)
+    return url
   }
 }

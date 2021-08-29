@@ -17,6 +17,13 @@ export default function loadRuleset() {
     {
       urlPattern: '^https://www.amazon.com',
       rawRules: ['\\/ref=[^/?]*']
+    },
+    {
+      urlPattern: '^https?:\\/\\/(?:[a-z0-9-]+\\.)*?youtube\\.com',
+      rules: ['feature', 'gclid', 'kw'],
+      redirections: [
+        '^https?:\\/\\/(?:[a-z0-9-]+\\.)*?youtube\\.com\\/redirect?.*?q=([^&]*)'
+      ]
     }
   ]
 }

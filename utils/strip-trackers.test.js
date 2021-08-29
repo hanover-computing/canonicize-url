@@ -32,4 +32,12 @@ describe('stripping trackers', () => {
       'https://www.amazon.com/Upgrade-Massager-Waterproof-Dillidos-Cellulite/dp/B09668ZY89?keywords=dildo&sr=8-1'
     )
   })
+
+  it('deals with redirects that CANNOT be resolved by HTTP semantics because webdevs are assholes and do not want you to auto-redirect', () => {
+    expect(
+      clearUrl(
+        'https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbGdRQXRVT01hNk1pWjU4Ulh6a0ltbnRYT1BMd3xBQ3Jtc0trblJ5aU5KRjdXZTI3YzJyME5BcnQydmd6UnVFTW1pUmFqNkZZbDNJNUtXWm1RTmE0MTRYTUoyc25kbVU5ZUlmbzBQWmpRMUptaXRyLW1hYmNEMV9rZUFpLUgwV045enFVM0RpclB4a1VkR3RFaC1IRQ&q=https%3A%2F%2Fstore.gamersnexus.net%2F'
+      )
+    ).toBe('https://store.gamersnexus.net/')
+  })
 })

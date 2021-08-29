@@ -31,7 +31,12 @@ export default function clearUrl(url) {
     )
       return
 
-    // ignore redirections since we already follow the links directly
+    // the redirections from this handles cases like youtube redirects where you literally CAN'T be redirected by an HTTP call because youtube is a piece of fucking shit
+    for (const redir of provider.redirections || []) {
+      const regex = new RegExp(redir)
+      const match = regex.exec(url)
+      if (match.length > 1) url = decodeURIComponent(match[1])
+    }
 
     // Explode query paramters to be checked against rules
     const parsedUrl = new URL(url)
