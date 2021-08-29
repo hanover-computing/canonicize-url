@@ -1,8 +1,8 @@
 import cheerio from 'cheerio'
-import trim from 'lodash/trim'
+import trim from 'lodash/trim.js'
 import leven from 'leven'
 import parseTld from 'tld-extract'
-import urlIsAmp from './url-is-amp'
+import urlIsAmp from './url-is-amp.js'
 
 // Look for the canonical link (also un-AMP-ifies the canonical link)
 // Not writing a separate metascraper-canonical library for this, as the "standard" way of determining
@@ -103,5 +103,7 @@ export default async function canonicizeHook(res) {
     } catch (err) {} // pass, the link is invalid
   }
 
-  return result
+  res.url = result
+
+  return res
 }

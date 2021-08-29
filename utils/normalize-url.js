@@ -1,5 +1,5 @@
 import normalizeUrl from 'normalize-url'
-import stripTrackers from './strip-trackers'
+import stripTrackers from './strip-trackers.js'
 import { URL } from 'url'
 
 export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {

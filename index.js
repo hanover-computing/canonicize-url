@@ -1,9 +1,9 @@
 import QuickLRU from 'quick-lru'
-import normalizeUrl from './utils/normalize-url'
-import httpClientGen from './utils/http-client'
-import dnsLookupGen from './utils/dns-lookup'
+import normalizeUrl from './utils/normalize-url.js'
+import httpClientGen from './utils/http-client.js'
+import dnsLookupGen from './utils/dns-lookup.js'
 
-export default ({
+export default (
   normalizeUrlOptions = {
     stripHash: true,
     removeQueryParameters: []
@@ -11,16 +11,13 @@ export default ({
   gotOptions = {
     followRedirect: true,
     maxRedirects: 10,
-    httpsOptions: {
-      rejectUnauthorized: true
-    },
     throwHttpErrors: true,
     timeout: {
       request: 14000 // global timeout
     },
     cache: new QuickLRU({ maxSize: 1000 })
   }
-}) => {
+) => {
   const httpClient = httpClientGen(gotOptions)
   const dnsLookup = dnsLookupGen(gotOptions.dnsCache)
   const normalize = normalizeUrl(normalizeUrlOptions, dnsLookup, httpClient)

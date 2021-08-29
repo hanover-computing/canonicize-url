@@ -1,5 +1,5 @@
 import { URL } from 'url'
-import load from '../data/loader'
+import load from '../data/loader.js'
 
 const providers = load()
 
