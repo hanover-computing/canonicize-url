@@ -37,7 +37,7 @@ export default async function canonicizeHook(res) {
       const relStrLower = relStr.toLowerCase()
       if (relStrLower.includes('rel') && relStrLower.includes('canonical')) {
         // <https://example.com>, https://example.com, etc.
-        const url = trim(linkStr.trim(), ['<', '>'])
+        const url = trim(linkStr.trim(), ['<', '>', ' '])
         matches.push(url)
       }
     })
@@ -58,49 +58,40 @@ export default async function canonicizeHook(res) {
   // The only reason we want canonical is to make our job with normalization easier;
   // So we need to make sure the canonical link IS for the url we're trying to normalize!
 
+  const { hostname: domain } = new URL(normalizedUrl)
   const { domain: baseDomain } = parseTld(normalizedUrl)
-
-  const candidates = matches
-    .map(link => {
-      // Before processing, we need to make sure all the URLs are in absolute form
-      if (link.startsWith('//')) {
-        return `https:${link}`
-      } else if (link.startsWith('/')) {
-        return `${baseDomain}${link}`
-      } else {
-        return link
-      }
-    })
-    .filter(link => {
-      // First, ensure that every match is a valid URL w/ a matching domain
-      // In this case, we're only matching the "top-level" domain -
-      // e.g. subdomain.(domain.com) - as a lot of sites host their shit on amp.(site.com)
-      // so we want to include references to www.site.com (actually *prefer* those)
-      try {
-        return parseTld(link).domain === baseDomain
-      } catch (err) {
-        return false
-      }
-    })
-    .filter(link => {
-      // Then, ensure that links aren't AMP'd
-      return !urlIsAmp(link)
-    })
 
   let result = normalizedUrl
   let minDist = Number.POSITIVE_INFINITY
 
-  for (const candidate of candidates) {
-    try {
-      const normalizedCandidate = await normalize(candidate)
+  for (const match of matches) {
+    let link = match
 
-      // Then, sort by similarity to the normalized URL of the page we ended up in
-      const dist = leven(normalizedUrl, normalizedCandidate)
-      if (dist < minDist) {
-        minDist = dist
-        result = normalizedCandidate
-      }
-    } catch (err) {} // pass, the link is invalid
+    // turn relative to absolute URL
+    if (match.startsWith('/')) link = `${domain}${match}`
+
+    // Skip invalid links
+    try {
+      link = await normalize(link)
+
+      // Ensure that every match is a valid URL w/ a matching domain
+      // In this case, we're only matching the "top-level" domain -
+      // e.g. subdomain.(domain.com) - as a lot of sites host their shit on amp.(site.com)
+      // so we want to include references to www.site.com (actually *prefer* those)
+      if (parseTld(link).domain !== baseDomain) continue
+
+      // Then, ensure that links aren't AMP'd
+      if (urlIsAmp(link)) continue
+    } catch (err) {
+      continue
+    }
+
+    // Then, sort by similarity to the normalized URL of the page we ended up in
+    const dist = leven(normalizedUrl, link)
+    if (dist < minDist) {
+      minDist = dist
+      result = link
+    }
   }
 
   res.url = result
