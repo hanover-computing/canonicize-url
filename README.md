@@ -6,7 +6,7 @@
 
 > normalize-url plus additional features to supercharge link normalization!
 
-While `normalize-url` is good enough for many normalization use cases, this library is akin to prettier or black in that it ABSOLUTELY normalizes links, including features like default www-stripping and default https (both of which fall back should such links do not exist - unlike `normalize-url`), stripping ALL trackers (courtesy of clearURLs), following redirects (even those that can't normally be automatically redirected without manual user intervention such as youtube redirect links), and even extracting canonical URLs.
+While `normalize-url` is good enough for many normalization use cases, this library is akin to prettier or black in that it ABSOLUTELY normalizes links, including features like default www-stripping and default https (both of which fall back should such links do not exist - unlike `normalize-url`), stripping ALL trackers (courtesy of clearURLs), following redirects (even those that can't normally be automatically redirected without manual user intervention such as youtube redirect links), and even extracting canonical URLs, all the while securing your servers from SSRF!
 
 ### 🏠 [Homepage](https://github.com/JaneJeon/normalize-url-plus)
 
@@ -17,6 +17,8 @@ npm i normalize-url-plus
 ```
 
 ## Usage
+
+Note that this package is ESM-only; see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c for what to do if you're using CJS (i.e. `require()`).
 
 ```js
 import gen from 'normalize-url-plus'
