@@ -1,9 +1,13 @@
 import { URL } from 'url'
 import load from '../data/loader.js'
+import logger from './logger.js'
 
 const providers = load()
+const debug = logger('utils/strip-trackers.js')
 
 export default function clearUrl(url) {
+  debug('Stripping trackers for %s', url)
+
   // Clean the given URL with the provided rules data.
   // URLs matching a provider's `urlPattern` and one or more of that
   // provider's redirection patterns will cause the URL to be replaced
@@ -17,6 +21,7 @@ export default function clearUrl(url) {
   providers.forEach(provider => {
     // Check provider urlPattern against provided URI
     if (!new RegExp(provider.urlPattern).test(url)) return
+    debug('Matched a provider %s', provider.urlPattern)
 
     // completeProvider is a boolean that determines if every url that
     // matches will be blocked. If you want to specify rules, exceptions
@@ -24,18 +29,21 @@ export default function clearUrl(url) {
     if (provider.completeProvider) throw new Error('Link is blocked')
 
     // If any exceptions are matched, this provider is skipped
-    if (
-      (provider.exceptions || []).some(exception =>
-        new RegExp(exception).test(url)
-      )
-    )
-      return
+    for (const exception of provider.exceptions || []) {
+      if (new RegExp(exception).test(url)) {
+        debug('Matched an exception %s. Skipping...', exception)
+        return
+      }
+    }
 
     // the redirections from this handles cases like youtube redirects where you literally CAN'T be redirected by an HTTP call because youtube is a piece of fucking shit
     for (const redir of provider.redirections || []) {
       const regex = new RegExp(redir)
       const match = regex.exec(url)
-      if (match.length > 1) url = decodeURIComponent(match[1])
+      if (match.length > 1) {
+        url = decodeURIComponent(match[1])
+        debug('Matched a redirect! %s', url)
+      }
     }
 
     // Explode query paramters to be checked against rules
@@ -47,6 +55,7 @@ export default function clearUrl(url) {
       for (const param of parsedUrl.searchParams.keys()) {
         if (regex.test(param)) {
           parsedUrl.searchParams.delete(param)
+          debug('Deleting a query parameter %s', param)
         }
       }
     }
@@ -55,6 +64,7 @@ export default function clearUrl(url) {
       for (const param of parsedUrl.searchParams.keys()) {
         if (regex.test(param)) {
           parsedUrl.searchParams.delete(param)
+          debug('Debugging a marketing query parameter %s', param)
         }
       }
     }
@@ -63,11 +73,13 @@ export default function clearUrl(url) {
 
     // Rebuild valid URI string with remaining query parameters
     url = parsedUrl.toString()
+    debug('Reformed URL %s', url)
 
     // Strip raw fragments with rawRules
     for (const rule of provider.rawRules || []) {
       const regex = new RegExp(rule)
       url = url.replace(regex, '')
+      debug('Stripped raw fragment %s to get %s', rule, url)
     }
   })
 

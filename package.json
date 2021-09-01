@@ -7,6 +7,7 @@
   "repository": "JaneJeon/normalize-url-plus",
   "author": "Jane Jeon <me@janejeon.dev>",
   "license": "LGPL-3.0",
+  "bin": "bin/normalize",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "update-data": "curl -L -s https://rules2.clearurls.xyz/data.minify.json > data/data.minify.json",
@@ -16,6 +17,8 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
+    "debug": "^4.3.2",
+    "got": "^12.0.0-beta.4",
     "got-scraping": "^3.0.1",
     "got-ssrf": "^1.0.2",
     "ipaddr.js": "^2.0.1",
