@@ -7,7 +7,7 @@
   "repository": "JaneJeon/normalize-url-plus",
   "author": "Jane Jeon <me@janejeon.dev>",
   "license": "LGPL-3.0",
-  "bin": "bin/normalize",
+  "bin": "bin/normalize.js",
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "update-data": "curl -L -s https://rules2.clearurls.xyz/data.minify.json > data/data.minify.json",
