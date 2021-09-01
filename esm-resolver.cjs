@@ -10,7 +10,7 @@ module.exports = function (request, options) {
   if (request.includes('data/loader'))
     request = request.replace('data/loader', 'data/__mocks__/loader')
   if (request.includes('strip-trackers'))
-    request = request.replace('__mocks__/strip-trackers')
+    request = request.replace('strip-trackers', '__mocks__/strip-trackers')
 
   // list global module that must be resolved by defaultResolver here
   if (
