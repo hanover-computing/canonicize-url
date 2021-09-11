@@ -25,6 +25,7 @@
     "leven": "^4.0.0",
     "lodash": "^4.17.21",
     "normalize-url": "^7.0.1",
+    "p-timeout": "^5.0.0",
     "quick-lru": "^6.0.1",
     "tld-extract": "^2.0.1"
   },
