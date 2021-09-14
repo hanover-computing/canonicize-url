@@ -1,11 +1,18 @@
 import normalizeUrl from 'normalize-url'
-import stripTrackers from './strip-trackers.js'
+import stripTrackersGen from './strip-trackers.js'
 import { URL } from 'url'
 import logger from './logger.js'
 
 const debug = logger('utils/normalize-url.js')
 
-export default function gen(normalizeUrlOptions, dnsLookup, httpClient) {
+export default function gen(
+  normalizeUrlOptions,
+  dnsLookup,
+  httpClient,
+  memOpts
+) {
+  const stripTrackers = stripTrackersGen(memOpts)
+
   return async function normalize(originalUrl) {
     // We default to non-www, https links
     const preferredOptions = {

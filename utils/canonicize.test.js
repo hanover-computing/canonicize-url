@@ -1,18 +1,26 @@
 import { expect, describe, it } from '@jest/globals'
 import got from 'got'
 import nock from 'nock'
-import hook from './canonicize'
+import hookGen from './canonicize'
+import EmptyCache from './__fixtures__/empty-cache'
 
 nock.disableNetConnect()
 
+async function mockNormalize(url) {
+  // just append protocol, do nothing else
+  return url.startsWith('http') || url.startsWith('https')
+    ? url
+    : `http://${url}`
+}
+
 describe('extracting canonical links', () => {
   const httpClient = got.extend({
-    hooks: { afterResponse: [hook] },
-    context: {
-      normalize: async url =>
-        url.startsWith('http') || url.startsWith('https')
-          ? url
-          : `http://${url}`
+    hooks: {
+      afterResponse: [
+        hookGen(mockNormalize, {
+          cache: new EmptyCache()
+        })
+      ]
     }
   })
 

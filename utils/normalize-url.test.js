@@ -1,7 +1,6 @@
 import { expect, describe, it } from '@jest/globals'
 import gen from './normalize-url'
-
-process.env.SKIP_CLEARURLS = 1
+import EmptyCache from './__fixtures__/empty-cache'
 
 const normalize = gen(
   { stripHash: true, removeQueryParameters: [] },
@@ -14,7 +13,8 @@ const normalize = gen(
       // throw if site doesn't support HTTPS
       if (url === 'https://www.test3.com/asdf') throw new Error()
     }
-  }
+  },
+  { cache: new EmptyCache() }
 )
 
 describe('link normalization', () => {

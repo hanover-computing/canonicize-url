@@ -1,5 +1,8 @@
 import { expect, describe, it } from '@jest/globals'
-import clearUrl from './strip-trackers'
+import clearUrlGen from './strip-trackers'
+import EmptyCache from './__fixtures__/empty-cache'
+
+const clearUrl = clearUrlGen({ cache: new EmptyCache() })
 
 describe('stripping trackers', () => {
   it('blocks "complete providers"', () => {

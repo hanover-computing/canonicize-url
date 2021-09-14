@@ -1,11 +1,12 @@
 import { URL } from 'url'
+import mem from 'mem'
 import load from '../data/loader.js'
 import logger from './logger.js'
 
 const providers = load()
 const debug = logger('utils/strip-trackers.js')
 
-export default function clearUrl(url) {
+function clearUrl(url) {
   debug('Stripping trackers for %s', url)
 
   // Clean the given URL with the provided rules data.
@@ -84,4 +85,8 @@ export default function clearUrl(url) {
   })
 
   return url
+}
+
+export default function clearUrlGen(memOpts) {
+  return mem(clearUrl, memOpts)
 }
