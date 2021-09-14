@@ -4,6 +4,7 @@ import normalizeUrl from './utils/normalize-url.js'
 import httpClientGen from './utils/http-client.js'
 import dnsLookupGen from './utils/dns-lookup.js'
 import logger from './utils/logger.js'
+import CacheableLookup from 'cacheable-lookup'
 
 const debug = logger('index.js')
 
@@ -19,7 +20,8 @@ export default (
     timeout: {
       request: 14000 // global timeout
     },
-    cache: new QuickLRU({ maxSize: 1000 })
+    cache: new QuickLRU({ maxSize: 1000 }),
+    dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 10000 }) })
   },
   timeoutMs = 15000 // global timeout for the ENTIRE function, because I'm afraid of blocking the event loop w/ some of the more compute-intensive shit
 ) => {
