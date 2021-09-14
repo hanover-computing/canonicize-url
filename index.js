@@ -26,7 +26,7 @@ export default (
   timeoutMs = 15000 // global timeout for the ENTIRE function, because I'm afraid of blocking the event loop w/ some of the more compute-intensive shit
 ) => {
   const httpClient = httpClientGen(gotOptions)
-  const dnsLookup = dnsLookupGen(gotOptions.dnsCache)
+  const dnsLookup = dnsLookupGen(gotOptions)
   const normalize = normalizeUrl(normalizeUrlOptions, dnsLookup, httpClient)
 
   // Normalize URL so that we can search by URL.
