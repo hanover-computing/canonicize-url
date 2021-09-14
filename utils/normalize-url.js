@@ -61,7 +61,11 @@ export default function gen(
     }
 
     // always strip trackers for consistency (even if it means worse performance)!
+    // And don't forget to normalize the end result of stripping tracking for consistency!
     debug('stripping trackers from %s', url)
-    return stripTrackers(url)
+    return normalizeUrl(stripTrackers(url), {
+      ...normalizeUrlOptions,
+      ...preferredOptions
+    })
   }
 }

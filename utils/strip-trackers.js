@@ -41,7 +41,7 @@ function clearUrl(url) {
     for (const redir of provider.redirections || []) {
       const regex = new RegExp(redir)
       const match = regex.exec(url)
-      if (match.length > 1) {
+      if (match && match.length > 1) {
         url = decodeURIComponent(match[1])
         debug('Matched a redirect! %s', url)
       }
