@@ -6,6 +6,8 @@ import logger from './logger.js'
 const providers = load()
 const debug = logger('utils/strip-trackers.js')
 
+const cachedRegex = mem(pattern => new RegExp(pattern))
+
 function clearUrl(url) {
   debug('Stripping trackers for %s', url)
 
@@ -16,12 +18,10 @@ function clearUrl(url) {
 
   // Shamelessly adopted from https://gitlab.com/CrunchBangDev/cbd-cogs/-/blob/master/Scrub/scrub.py
   // TODO: benchmark regex search
-  // TODO: cache new RegExp() calls...?
-  // For now, this is a version written w/o any performance shit in mind
 
   providers.forEach(provider => {
     // Check provider urlPattern against provided URI
-    if (!new RegExp(provider.urlPattern).test(url)) return
+    if (!cachedRegex(provider.urlPattern).test(url)) return
     debug('Matched a provider %s', provider.urlPattern)
 
     // completeProvider is a boolean that determines if every url that
@@ -31,7 +31,7 @@ function clearUrl(url) {
 
     // If any exceptions are matched, this provider is skipped
     for (const exception of provider.exceptions || []) {
-      if (new RegExp(exception).test(url)) {
+      if (cachedRegex(exception).test(url)) {
         debug('Matched an exception %s. Skipping...', exception)
         return
       }
@@ -39,7 +39,7 @@ function clearUrl(url) {
 
     // the redirections from this handles cases like youtube redirects where you literally CAN'T be redirected by an HTTP call because youtube is a piece of fucking shit
     for (const redir of provider.redirections || []) {
-      const regex = new RegExp(redir)
+      const regex = cachedRegex(redir)
       const match = regex.exec(url)
       if (match && match.length > 1) {
         url = decodeURIComponent(match[1])
@@ -52,7 +52,7 @@ function clearUrl(url) {
 
     // Check regular rules and referral marketing rules
     for (const rule of provider.rules || []) {
-      const regex = new RegExp(rule)
+      const regex = cachedRegex(rule)
       for (const param of parsedUrl.searchParams.keys()) {
         if (regex.test(param)) {
           parsedUrl.searchParams.delete(param)
@@ -61,7 +61,7 @@ function clearUrl(url) {
       }
     }
     for (const rule of provider.referralMarketing || []) {
-      const regex = new RegExp(rule)
+      const regex = cachedRegex(rule)
       for (const param of parsedUrl.searchParams.keys()) {
         if (regex.test(param)) {
           parsedUrl.searchParams.delete(param)
@@ -78,7 +78,7 @@ function clearUrl(url) {
 
     // Strip raw fragments with rawRules
     for (const rule of provider.rawRules || []) {
-      const regex = new RegExp(rule)
+      const regex = cachedRegex(rule)
       url = url.replace(regex, '')
       debug('Stripped raw fragment %s to get %s', rule, url)
     }
