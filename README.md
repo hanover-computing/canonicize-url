@@ -26,7 +26,7 @@ const normalizeUrl = gen(normalizeUrlOptions, gotOptions) // it is recommended t
 
 const longDisgustingTrackerFilledLink =
   'https://www.amazon.com/Blanket-Fleece-Cartoon-Printing-Napping/dp/B089G4JDVB/ref=sr_1_1?keywords=hello%20kitty&sr=8-1' // eww
-normalizeUrl(longDisgustingTrackerFilledLink) // https://amazon.com/Blanket-Fleece-Cartoon-Printing-Napping/dp/B089G4JDVB
+await normalizeUrl(longDisgustingTrackerFilledLink) // https://amazon.com/Blanket-Fleece-Cartoon-Printing-Napping/dp/B089G4JDVB
 ```
 
 ## Run tests
