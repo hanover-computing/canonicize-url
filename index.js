@@ -25,11 +25,7 @@ export default (
     dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 100000 }) })
   },
   timeoutMs = 15000,
-  canonicizeMemOpts = {
-    cache: new QuickLRU({ maxSize: 100000 }),
-    cachePromiseRejection: true,
-    maxAge: 86400000 // 24 hours
-  },
+  canonicizeMemOpts = { cache: new QuickLRU({ maxSize: 100000 }) },
   stripTrackersMemOpts = { cache: new QuickLRU({ maxSize: 100000 }) }
   // The cache numbers are pulled from the most reliable source on the internet: my ass.
 ) => {
