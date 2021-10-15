@@ -27,7 +27,6 @@
     "lodash": "^4.17.21",
     "mem": "^9.0.1",
     "normalize-url": "^7.0.2",
-    "p-memoize": "^5.0.0",
     "p-timeout": "^5.0.0",
     "quick-lru": "^6.0.1",
     "re2": "^1.16.0",

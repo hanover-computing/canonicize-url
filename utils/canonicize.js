@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 import trim from 'lodash/trim.js'
 import leven from 'leven'
 import parseTld from 'tld-extract'
-import mem from 'p-memoize'
+import mem from 'mem'
 import urlIsAmp from './url-is-amp.js'
 import logger from './logger.js'
 
