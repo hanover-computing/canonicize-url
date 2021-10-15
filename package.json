@@ -1,6 +1,6 @@
 {
   "name": "normalize-url-plus",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "normalize-url plus additional features to supercharge link normalization!",
   "exports": "./index.js",
   "type": "module",
