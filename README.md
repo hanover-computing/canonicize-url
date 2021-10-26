@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to normalize-url-plus 👋</h1>
 
-[![CircleCI](https://circleci.com/gh/JaneJeon/normalize-url-plus.svg?style=shield)](https://circleci.com/gh/JaneJeon/normalize-url-plus)
+[![CI](https://github.com/JaneJeon/normalize-url-plus/actions/workflows/ci.yml/badge.svg)](https://github.com/JaneJeon/normalize-url-plus/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/npm/v/normalize-url-plus)](https://www.npmjs.com/package/normalize-url-plus)
 [![Downloads](https://img.shields.io/npm/dt/normalize-url-plus)](https://www.npmjs.com/package/normalize-url-plus)
 
