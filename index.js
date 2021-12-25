@@ -6,6 +6,7 @@ import dnsLookupGen from './utils/dns-lookup.js'
 import logger from './utils/logger.js'
 import CacheableLookup from 'cacheable-lookup'
 import { gotSsrf } from 'got-ssrf'
+import { PRESETS } from 'header-generator'
 
 const debug = logger('index.js')
 
@@ -22,7 +23,12 @@ export default (
       request: 14000 // global timeout
     },
     cache: new QuickLRU({ maxSize: 10000 }),
-    dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 100000 }) })
+    dnsCache: new CacheableLookup({ cache: new QuickLRU({ maxSize: 100000 }) }),
+    context: {
+      insecureHTTPParser: false,
+      proxyUrl: process.env.HTTP_PROXY_URL,
+      headerGeneratorOptions: PRESETS.MODERN_WINDOWS_CHROME
+    }
   },
   timeoutMs = 15000,
   canonicizeMemOpts = { cache: new QuickLRU({ maxSize: 100000 }) },

@@ -1,4 +1,4 @@
-import got from 'got'
+import { got } from 'got'
 import { gotScraping } from 'got-scraping'
 import { gotSsrf } from 'got-ssrf'
 import canonicizeHookGen from './canonicize.js'
