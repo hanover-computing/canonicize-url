@@ -16,6 +16,9 @@ export default (
     removeQueryParameters: []
   },
   gotOptions = {
+    https: {
+      rejectUnauthorized: true
+    },
     followRedirect: true,
     maxRedirects: 10,
     throwHttpErrors: true,
