@@ -1,6 +1,6 @@
 import { expect, describe, it } from '@jest/globals'
-import gen from './normalize-url'
-import EmptyCache from './__fixtures__/empty-cache'
+import gen from './normalize-url.js'
+import EmptyCache from './__fixtures__/empty-cache.js'
 
 const normalize = gen(
   { stripHash: true, removeQueryParameters: [] },

@@ -1,8 +1,8 @@
 import { expect, describe, it } from '@jest/globals'
 import got from 'got'
 import nock from 'nock'
-import hookGen from './canonicize'
-import EmptyCache from './__fixtures__/empty-cache'
+import hookGen from './canonicize.js'
+import EmptyCache from './__fixtures__/empty-cache.js'
 
 nock.disableNetConnect()
 

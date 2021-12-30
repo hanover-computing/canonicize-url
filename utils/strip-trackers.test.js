@@ -1,6 +1,6 @@
 import { expect, describe, it } from '@jest/globals'
-import clearUrlGen from './strip-trackers'
-import EmptyCache from './__fixtures__/empty-cache'
+import clearUrlGen from './strip-trackers.js'
+import EmptyCache from './__fixtures__/empty-cache.js'
 
 const clearUrl = clearUrlGen({ cache: new EmptyCache() })
 
