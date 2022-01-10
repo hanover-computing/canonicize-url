@@ -54,8 +54,4 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2021 [Jane Jeon <me@janejeon.dev>](https://github.com/JaneJeon).<br />
-This project is [LGPL-3.0](https://github.com/JaneJeon/normalize-url-plus/blob/main/LICENSE) licensed.
-
----
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
+This project is [LGPL-3.0](https://github.com/JaneJeon/normalize-url-plus/blob/main/LICENSE) licensed (TL;DR: please contribute back any improvements to this library).
