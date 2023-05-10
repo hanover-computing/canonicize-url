@@ -5,7 +5,7 @@
   "exports": "./index.js",
   "type": "module",
   "repository": "JaneJeon/normalize-url-plus",
-  "author": "Jane Jeon <me@janejeon.dev>",
+  "author": "Jane Jeon <git@janejeon.com>",
   "license": "LGPL-3.0",
   "bin": "bin/normalize.js",
   "scripts": {
