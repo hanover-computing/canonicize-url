@@ -1,5 +1,6 @@
 <h1 align="center">Welcome to canonicize-url 👋</h1>
 
+[![GitHub Actions](https://github.com/hanover-computing/canonicize-url/actions/workflows/ci.yml/badge.svg)](https://github.com/hanover-computing/canonicize-url/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/JaneJeon/canonicize-url/branch/master/graph/badge.svg)](https://codecov.io/gh/JaneJeon/canonicize-url)
 [![Version](https://img.shields.io/npm/v/canonicize-url)](https://www.npmjs.com/package/canonicize-url)
 [![Downloads](https://img.shields.io/npm/dt/canonicize-url)](https://www.npmjs.com/package/canonicize-url)
