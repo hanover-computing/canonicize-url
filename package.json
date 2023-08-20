@@ -1,31 +1,37 @@
 {
-  "name": "normalize-url-plus",
+  "name": "canonicize-url",
   "version": "1.5.4",
-  "description": "normalize-url plus additional features to supercharge link normalization!",
-  "exports": "./index.js",
+  "description": "Get a stable, canonical version of any URL!",
   "type": "module",
-  "repository": "JaneJeon/normalize-url-plus",
+  "repository": "hanover-computing/normalize-url-plus",
   "author": "Jane Jeon <git@janejeon.com>",
   "license": "LGPL-3.0",
   "bin": "bin/normalize.js",
   "engines": {
     "node": ">=16"
   },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:ui": "vitest --ui",
     "update-data": "curl -L -s https://rules2.clearurls.xyz/data.minify.json > data/data.minify.json",
     "lint": "run-s lint:*",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "cacheable-lookup": "^6.0.1",
     "cheerio": "^1.0.0-rc.10",
     "debug": "^4.3.2",
-    "got": "^12.0.0",
-    "got-scraping": "^3.2.3",
-    "got-ssrf": "^1.3.0",
     "ipaddr.js": "^2.0.1",
     "leven": "^4.0.0",
     "lodash": "^4.17.21",
@@ -37,17 +43,22 @@
     "tld-extract": "^2.0.1"
   },
   "devDependencies": {
-    "@janejeon/eslint-config": "^2.2.0",
-    "@janejeon/prettier-config": "^1.1.0",
-    "enhanced-resolve": "^5.8.3",
+    "@janejeon/eslint-config-typescript": "^0.1.0",
+    "@janejeon/prettier-config": "^2.0.0",
+    "@janejeon/tsconfig": "^0.3.1",
+    "@types/debug": "^4.1.8",
+    "@vitest/coverage-istanbul": "^0.34.2",
+    "@vitest/ui": "^0.34.2",
     "husky": "^6.0.0",
-    "jest": "^27.2.1",
-    "jest-junit": "^14.0.0",
-    "lint-staged": "13.0.3",
+    "lint-staged": "^14.0.0",
     "nock": "^13.1.3",
-    "node-notifier": "^10.0.0",
     "npm-run-all": "^4.1.5",
-    "skip-ci": "^1.0.4"
+    "skip-ci": "^1.0.4",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.2"
+  },
+  "peerDependencies": {
+    "got": "^12 || ^13"
   },
   "keywords": [
     "normalize",
