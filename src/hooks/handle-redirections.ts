@@ -1,8 +1,8 @@
-import type { BeforeRequestHook } from 'got'
-
 import getDebug from '../lib/debug.js'
 import { providers } from '../data/index.js'
 import cleanUrl from '../lib/clear-url.js'
+
+import type { BeforeRequestHook } from 'got'
 
 const debug = getDebug('hooks:handle-redirections')
 
