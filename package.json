@@ -21,7 +21,7 @@
     "test": "vitest",
     "test:cov": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "update-data": "curl -L -s https://rules2.clearurls.xyz/data.minify.json > data/data.minify.json",
+    "update-data": "curl -L -s https://rules2.clearurls.xyz/data.minify.json > src/data/data.minify.json",
     "lint": "run-s lint:*",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint .",
