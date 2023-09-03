@@ -14,7 +14,7 @@ const debug = getDebug('lib:clear-url')
  * @param redirectOnly whether to only look at redirects (and skip tracker stripping)
  * @returns cleaned URL (or the provided URL, if nothing matches)
  */
-export function cleanUrl(
+export default function cleanUrl(
   initialUrl: string,
   providers: Provider[],
   redirectOnly: boolean
