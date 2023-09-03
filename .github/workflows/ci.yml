@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18]
+        node: [18, 20]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -34,10 +34,10 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - name: Run test
-        if: matrix.node != 18
+        if: matrix.node != 20
         run: npm test
       - name: Run test with coverage
-        if: matrix.node == 18
+        if: matrix.node == 20
         run: npm run test:cov
       - uses: codecov/codecov-action@v3
-        if: matrix.node == 18
+        if: matrix.node == 20
