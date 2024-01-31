@@ -20,7 +20,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "cacheable-lookup": "^6.0.1",
+    "cacheable-lookup": "^7.0.0",
     "cheerio": "^1.0.0-rc.10",
     "debug": "^4.3.2",
     "got": "^14.0.0",
