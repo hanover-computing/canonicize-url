@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@janejeon/eslint-config": "^2.2.0",
-    "@janejeon/prettier-config": "^1.1.0",
+    "@janejeon/prettier-config": "^2.0.0",
     "enhanced-resolve": "^5.8.3",
     "husky": "^6.0.0",
     "jest": "^29.0.0",
