@@ -41,7 +41,7 @@
     "@janejeon/prettier-config": "^1.1.0",
     "enhanced-resolve": "^5.8.3",
     "husky": "^6.0.0",
-    "jest": "^29.0.0",
+    "jest": "^30.0.0",
     "jest-junit": "^16.0.0",
     "lint-staged": "15.5.2",
     "nock": "^13.1.3",
