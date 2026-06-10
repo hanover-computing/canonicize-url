@@ -23,7 +23,7 @@
     "cacheable-lookup": "^7.0.0",
     "cheerio": "^1.0.0-rc.10",
     "debug": "^4.3.2",
-    "got": "^14.0.0",
+    "got": "^15.0.0",
     "got-scraping": "^4.0.0",
     "got-ssrf": "^3.0.0",
     "ipaddr.js": "^2.0.1",
